@@ -1,5 +1,14 @@
 #!/bin/sh
 
+# <bitbar.title>yabai enhanced</bitbar.title>
+# <bitbar.version>v1.0</bitbar.version>
+# <bitbar.author>CHristian Baer</bitbar.author>
+# <bitbar.author.github>chrisb86</bitbar.author.github>
+# <bitbar.desc>Bitbar plugin to display yabai space ID and and mode with custom icon themes and dark mode support. </bitbar.desc>
+# <bitbar.image>https://raw.githubusercontent.com/chrisb86/bitbar_yabai_enhanced/main/screenshot.png</bitbar.image>
+# <bitbar.dependencies>sh, yabai</bitbar.dependencies>
+# <bitbar.abouturl>https://github.com/chrisb86/</bitbar.abouturl>
+
 ## Set theme
 theme="default"
 
