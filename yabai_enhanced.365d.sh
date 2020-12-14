@@ -78,7 +78,6 @@ else
 	fi
 fi
 
-
 ## Output base64 icons
 icon() {
 	case $1 in
@@ -128,7 +127,12 @@ d=0; while [ ${d} -ne ${yabai_displays} ]; do
 	for s in ${display_spaces}; do
 		space_label=$(${yabai} -m query --spaces --space $s --display $d | jq -r '.label')
 		space_label="${space_label:-Unnamed}" 
-		echo "--$s: ${space_label} | image=$(icon $(${yabai} -m query --spaces --space $s --display | jq -r '.type')) terminal=false bash=${yabai} param1=-m param2=space param3=--focus param4=$s"
+		
+		if [[ ${s} = ${space_id} ]]; then
+    	echo "--$s: ${space_label} | image=$(icon $(${yabai} -m query --spaces --space $s --display | jq -r '.type')) checked=true"
+  	else
+    	echo "--$s: ${space_label} | image=$(icon $(${yabai} -m query --spaces --space $s --display | jq -r '.type')) terminal=false bash=${yabai} param1=-m param2=space param3=--focus param4=$s"
+  	fi
 	done
 done
 echo "---"
