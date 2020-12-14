@@ -1,14 +1,5 @@
 #!/bin/sh
 
-# <bitbar.title>yabai enhanced</bitbar.title>
-# <bitbar.version>v1.0</bitbar.version>
-# <bitbar.author>CHristian Baer</bitbar.author>
-# <bitbar.author.github>chrisb86</bitbar.author.github>
-# <bitbar.desc>Bitbar plugin to display yabai space ID and and mode with custom icon themes and dark mode support. </bitbar.desc>
-# <bitbar.image>https://raw.githubusercontent.com/chrisb86/bitbar_yabai_enhanced/main/screenshot.png</bitbar.image>
-# <bitbar.dependencies>sh, yabai</bitbar.dependencies>
-# <bitbar.abouturl>https://github.com/chrisb86/</bitbar.abouturl>
-
 ## Set theme
 theme="default"
 
@@ -39,7 +30,7 @@ space_id=$(${yabai} -m query --spaces --display | jq 'map(select(."focused" == 1
 space_mode=$(${yabai} -m query --spaces --display | jq -r 'map(select(."focused" == 1))[-1].type')
 
 ## Check if dark mode is active in macOS
-macos_darkmode=$(defaults read -g AppleInterfaceStyle 2>/dev/null)
+macos_darkmode=${BitBarDarkMode}
 
 enc_icon() {
 	base64 -i $1 -o -
@@ -108,7 +99,7 @@ echo "---"
 echo "Select mode for current space"
 for mode in ${yabai_modes}; do
   if [[ ${space_mode} = ${mode} ]]; then
-    echo "${mode} | image=$(icon ${mode})"
+    echo "${mode} | image=$(icon ${mode}) checked=true "
   else
     echo "${mode} | image=$(icon ${mode}) terminal=false bash=${yabai} param1=-m param2=space param3=--layout param4=${mode}"
   fi
@@ -127,8 +118,13 @@ d=0; while [ ${d} -ne ${yabai_displays} ]; do
 
 	for s in ${display_spaces}; do
 		space_label=$(${yabai} -m query --spaces --space $s --display $d | jq -r '.label')
-		space_label="${space_label:-Unnamed}" 
-		echo "--$s: ${space_label} | image=$(icon $(${yabai} -m query --spaces --space $s --display | jq -r '.type')) terminal=false bash=${yabai} param1=-m param2=space param3=--focus param4=$s"
+		space_label="${space_label:-Unnamed}"
+
+		if [[ ${s} = ${space_id} ]]; then
+    	echo "--$s: ${space_label} | image=$(icon $(${yabai} -m query --spaces --space $s --display | jq -r '.type')) checked=true"
+  	else
+    	echo "--$s: ${space_label} | image=$(icon $(${yabai} -m query --spaces --space $s --display | jq -r '.type')) terminal=false bash=${yabai} param1=-m param2=space param3=--focus param4=$s"
+  	fi
 	done
 done
 echo "---"
